@@ -15,7 +15,6 @@ $(document).ready(function() {
   var main, desc, icon;
 
   $.ajax({
-    // 5 day forecast : ..api.openweathermap.org/data/2.5/forecast?lat=..
     url: "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=metric" + "&APPID=e9ac616cdae9b774f8067cc80eab9b23",
     dataType: "text",
     success: function(data) {
@@ -156,5 +155,5 @@ $(document).ready(function() {
     $("#units").html(units);
 
   });
-  
+
 });
