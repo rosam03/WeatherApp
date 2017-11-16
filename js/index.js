@@ -1,12 +1,22 @@
+
+/*
+ * Obtains weather for geolocation via Open Weather Map
+ * API and updates HTML elements correspondingly.
+ *
+ */
 $(document).ready(function() {
 
+  // ideally app_id should be stored in a private config file
+  var app_id = "e9ac616cdae9b774f8067cc80eab9b23";
+  
   var city = geoplugin_city();
   var state = geoplugin_region();
   var country = geoplugin_countryName();
   var latitude = geoplugin_latitude();
   var longitude = geoplugin_longitude();
-  //images: ["sun","cloud","rain","snow","fog","thunder"];
-  var images = ["http://randomwallpapers.net/nature-sunny-tree-2560x1440-wallpaper236910.jpg", "https://www.ndsu.edu/nd_geology/nd_weather/images_weather/wall_cloud_dawson_nd1.jpg", "https://images.alphacoders.com/120/120313.jpg", "http://wp.streetwise.co/wp-content/uploads//2014/10/Screen-Shot-2014-10-28-at-8.27.12-AM1.png", "http://iliketowastemytime.com/sites/default/files/foggy-morning-river-hd-wallpaper.jpg", "http://www.cbc.ca/doczone/content/images/episodes/waethergonewiild_1280.jpg"];
+  
+  var images = ["images/sunny.png", "images/suncloud.png","images/cloudy.png", 
+                "images/rain.png", "images/storm.png", "images/foggy.png"];
 
   $("#location").html("<div>" + city + "</div>");
 
@@ -15,7 +25,7 @@ $(document).ready(function() {
   var main, desc, icon;
 
   $.ajax({
-    url: "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=metric" + "&APPID=e9ac616cdae9b774f8067cc80eab9b23",
+    url: "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=metric" + "&APPID="+app_id,
     dataType: "text",
     success: function(data) {
 
@@ -23,7 +33,8 @@ $(document).ready(function() {
       data = JSON.stringify(data);
 
       arr = data.split(',');
-
+      
+      // display details in HTML elements
       $.each(data, function() {
         $.each(this, function(key, val) {});
 
@@ -41,6 +52,8 @@ $(document).ready(function() {
         var iconIndex;
         var backgroundIndex;
 
+        // codes correspond to weather descriptions
+        // see open weather map api site for details
         switch (icon) {
           case "01d":
             backgroundIndex = 0;
@@ -116,7 +129,11 @@ $(document).ready(function() {
             break;
         }
 
-        var icons = ["http://openweathermap.org/img/w/01d.png", "http://openweathermap.org/img/w/02d.png", "http://openweathermap.org/img/w/03d.png", "http://openweathermap.org/img/w/04d.png", "http://openweathermap.org/img/w/09d.png", "http://openweathermap.org/img/w/10d.png", "http://openweathermap.org/img/w/11d.png", "http://openweathermap.org/img/w/13d.png", "http://openweathermap.org/img/w/50d.png", "http://openweathermap.org/img/w/01n.png", "http://openweathermap.org/img/w/02n.png", "http://openweathermap.org/img/w/03n.png", "http://openweathermap.org/img/w/04n.png", "http://openweathermap.org/img/w/09n.png", "http://openweathermap.org/img/w/10n.png", "http://openweathermap.org/img/w/11n.png", "http://openweathermap.org/img/w/13n.png", "http://openweathermap.org/img/w/50n.png"];
+        var icons = ["images/01d.png", "images/02d.png", "images/03d.png", "images/04d.png", 
+                     "images/09d.png", "images/10d.png", "images/11d.png", "images/13d.png", 
+                     "images/50d.png", "images/01n.png", "images/02n.png", "images/03n.png", 
+                     "images/04n.png", "images/09n.png", "images/10n.png", "images/11n.png", 
+                     "images/13n.png", "images/50n.png"];
 
         $("#icon").html("<div>" + "<img src='" + icons[iconIndex] + "'>" + "</div>");
 
@@ -126,25 +143,24 @@ $(document).ready(function() {
         temp = temp.substring(15, temp.length);
         temp = temp * 1.0;
         temp = temp.toPrecision(2);
+        
         $("#temp").html(temp + "&deg;C");
-
       });
-
     }
-
   });
 
+  // enable switching to farenheight
   var units = "Switch to Farenheight";
   $("#units").html(units);
   $("#units").click(function() {
-
+    // convert back to celsius
     if (units == "Switch to Farenheight") {
       units = "Switch to Celsius";
       temp = (temp * 9 / 5 + 32) / 1.0;
       temp = temp.toPrecision(2);
       $("#temp").html(temp);
       $("#temp").append("&deg;F")
-    } else {
+    } else { // convert to farenheight
       units = "Switch to Farenheight";
       temp = ((temp - 32) * 5 / 9) / 1.0;
       temp = temp.toPrecision(2);
@@ -153,7 +169,5 @@ $(document).ready(function() {
     }
 
     $("#units").html(units);
-
   });
-
 });
