@@ -25,7 +25,8 @@ $(document).ready(function() {
   var main, desc, icon;
 
   $.ajax({
-    url: "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=metric" + "&APPID="+app_id,
+    url: "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + 
+        "&lon=" + longitude + "&units=metric" + "&APPID="+app_id,
     dataType: "text",
     success: function(data) {
 
